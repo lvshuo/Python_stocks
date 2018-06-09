@@ -440,15 +440,15 @@ data_range=13
 x_data=[]
 y_label='Net Cash Flow (10 th)'
 
-#y_net_cashflow_data=_csv_data2int_data(f_net_cashflow,start_index,y_net_cashflow_data)
-f_csv=pd.read_csv(f_net_cashflow,encoding='gb2312')
-f_csv2np=np.array(f_csv.iloc[start_index,:])
-
-for i in range(len(y_net_cashflow_data)):
-   if f_csv2np[i+1]=='--':
-      f_csv2np[i+1]='0'
-       
-   y_net_cashflow_data[i]=float(f_csv2np[i+1])
+y_net_cashflow_data=_csv_data2int_data(f_net_cashflow,start_index,y_net_cashflow_data)
+#f_csv=pd.read_csv(f_net_cashflow,encoding='gb2312')
+#f_csv2np=np.array(f_csv.iloc[start_index,:])
+#
+#for i in range(len(y_net_cashflow_data)):
+#   if f_csv2np[i+1]=='--':
+#      f_csv2np[i+1]='0'
+#       
+#   y_net_cashflow_data[i]=float(f_csv2np[i+1])
 
 x_data=_get_x_data(y_net_cashflow_data) ##获取X坐标  
 #y_data=np.array(y_data)
