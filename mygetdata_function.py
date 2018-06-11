@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import platform 
 
-
+##------------------------初始化变量---------------------------------------
 x_data1=[2017,2016,2015,2014,2013,2012]
 x_data2=[2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006,2005]
 x_data=[]
@@ -29,7 +29,9 @@ y_ponds_interest=[]
 label_dict={'Rev':'Revenue','Cash':'Cash Flow'}
 url_mac='/Users/shuolv/Python/code-finace/data/'
 url_window='data/'
+m_this_year=2017 ##
 
+##----------------获取操作系统--------
 def UsePlatform():
     User_systerm=platform.system()
     return User_systerm
@@ -45,7 +47,7 @@ else:
 
 print(url_comman)
 
-# 解析代码
+##--------------------字符串转换----------------------
 def _tcode(s):
     l = len(str(s))
     v = str(s)
@@ -55,7 +57,7 @@ def _tcode(s):
         return v
     else:
         return ('0'*(6-l))+v
-
+##---------------------基础数据下载------------------------------------
 def _download(url,to_file):
     i_error=0
     i_new=0
@@ -130,7 +132,7 @@ def _csv_data2int_data(file_cvs,start_index,y_data):
 ##----------------------X_data转换--------------------------
 def _get_x_data(y_data):## 根据y_data 确定x_data
     for i in range(len(y_data)):
-        x_data.append([2017-i]) ##2017年
+        x_data.append([m_this_year-i]) ##2017年
         #print(x_data[i])
         
     return x_data
@@ -212,7 +214,17 @@ if not os.path.exists(path2save):
     os.mkdir(path2save)
 else:
     pass
-
+####------------------------判断数据所在行数-----------------------
+def _get_csv_data_row(f_csv,accounts):
+    df=pd.read_excel(f_csv)
+    df=DataFrame(df)
+    df.columns.tolist()
+    print(df[0:0])
+    for s in range(15):
+        print(df.iat[s,0])
+       # y_data1.append(df.iat[start_index,s+1]) 
+    
+   ## '净资产收益率(%)'
 
 #############---------------下载资产负债表-----------------
 bs_url = 'http://quotes.money.163.com/service/zcfzb_{code}.html?type=year'
@@ -263,20 +275,37 @@ print(str(datetime.now()),'正在下载',names,'主要财务比率')
 
 tables = pd.read_html(ylbl_url.format(code=_tcode(codes)))
 
-
+Path_table5=path2save+'主要财务指标-' + names+ '.xlsx'
+Path_table6=path2save+'盈利能力-' + names + '.xlsx'
+Path_table7=path2save+'成长能力-' + names + '.xlsx'
+Path_table8=path2save+'偿还能力-' + names + '.xlsx'
 
 i=0
 for table in tables:
     
     if i>=5:       
-        if i==5:          
-            DataFrame(table).to_excel(path2save+'主要财务指标-' + names+ '.xlsx')
+        if i==5:
+            if os.path.exists(Path_table5):
+                pass
+            else:
+                DataFrame(table).to_excel(Path_table5)
         if i==6:
-             DataFrame(table).to_excel(path2save+'盈利能力-' + names + '.xlsx') 
+            if os.path.exists(Path_table6):
+                pass
+            else:
+                DataFrame(table).to_excel(Path_table6)
+            
         if i==7:
-             DataFrame(table).to_excel(path2save+'成长能力-' + names + '.xlsx') 
+            if os.path.exists(Path_table7):
+                pass
+            else:
+                DataFrame(table).to_excel(Path_table7)
+             
         if i==8:
-             DataFrame(table).to_excel(path2save+'偿还能力-' + names + '.xlsx') 
+            if os.path.exists(Path_table8):
+                pass
+            else:
+                DataFrame(table).to_excel(Path_table8)
         i += 1        
     else:
         i+=1
@@ -291,6 +320,7 @@ start_index=7 #ROE 数据行数
 y_data1=[]
 data_range=6
 f_zycw=path2save+'主要财务指标-' + names+ '.xlsx'
+_get_csv_data_row(f_zycw,'指标')
 y_label='ROE %'
 _matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
 
