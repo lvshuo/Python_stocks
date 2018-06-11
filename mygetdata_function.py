@@ -470,8 +470,9 @@ plt.show()
 
 print('---------------------数据对比---------------------')
 
-plt.plot(x_data,y_net_profit_data,'go--',linewidth=2,linestyle='--',label='Net profit')
+
 plt.plot(x_data,y_revenue_data,'bo--',linewidth=2,label='Revenue')
+plt.plot(x_data,y_net_profit_data,'go--',linewidth=2,linestyle='--',label='Net profit')
 plt.plot(x_data,y_account_receivable_data,'ro--',linewidth=2,label='Accounts Receivable')
 plt.plot(x_data,y_net_cashflow_data,'yo--',linewidth=2,label='Net Cash')
 plt.grid(True)
