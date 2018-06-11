@@ -13,6 +13,7 @@ import tushare as c
 import os,stat
 import matplotlib.pyplot as plt
 import numpy as np
+import platform 
 
 
 x_data1=[2017,2016,2015,2014,2013,2012]
@@ -26,11 +27,23 @@ y_liability_short_interest=[]
 y_liability_long_interest=[]
 y_ponds_interest=[]
 label_dict={'Rev':'Revenue','Cash':'Cash Flow'}
-
 url_mac='/Users/shuolv/Python/code-finace/data/'
 url_window='data/'
 
-url_comman=url_mac
+def UsePlatform():
+    User_systerm=platform.system()
+    return User_systerm
+
+
+#####----------------------操作系统判断--------------------------------
+user_platform=UsePlatform()
+
+if user_platform =='Windows' :
+    url_comman=url_window
+else:
+    url_comman=url_mac
+
+print(url_comman)
 
 # 解析代码
 def _tcode(s):
@@ -72,12 +85,20 @@ def _download(url,to_file):
 
 def _csv_data2int_data(file_cvs,start_index,y_data):
     
-    f_csv=pd.read_csv(file_cvs,encoding='gb2312')
+    if user_platform== 'Windows':  
+        f_csv_read=open(file_cvs)
+        f_csv=pd.read_csv(f_csv_read)  # For windows
+        f_csv_read.close()
+        f_csv
+    else:
+        f_csv=pd.read_csv(file_cvs,encoding='gb2312')  #For Mac os
+  
     f_csv2np=np.array(f_csv.iloc[start_index,:])
+    
 #    f_csv=pd.read_excel(file_cvs)
 #    f_csv=DataFrame(f_csv)
-#
 #    f_csv2np=f_csv.iat[start_index,:]
+
     
     temp=len(f_csv2np)-3
     if(temp>=10):
@@ -159,8 +180,11 @@ codes=int(code_num)
 #names=str(codes)
 #############---------------判断对应的公司名称-----------------
 
-#c_sbf = 'data/stocks_b.csv' 
-
+if not os.path.exists(url_comman):
+    os.mkdir(url_comman)
+else:
+    pass
+    
 c_sbf=url_comman+'stocks_b.csv'
 
 if not os.path.exists(c_sbf):
@@ -417,14 +441,7 @@ x_data=[]
 y_label='Net profit'
 
 y_net_profit_data=_csv_data2int_data(f_net_profit,start_index,y_net_profit_data)
-#f_csv=pd.read_csv(f_net_profit,encoding='gb2312')
-#f_csv2np=np.array(f_csv.iloc[start_index,:])
-#
-#for i in range(len(y_net_profit_data)):
-#   if f_csv2np[i+1]=='--':
-#      f_csv2np[i+1]='0'
-#    
-#   y_net_profit_data[i]=float(f_csv2np[i+1])
+
 x_data=_get_x_data(y_net_profit_data) ##获取X坐标
 #y_data=np.array(y_data)
 plt.plot(x_data,y_net_profit_data,'bo--',linewidth=2)
@@ -441,14 +458,7 @@ x_data=[]
 y_label='Net Cash Flow (10 th)'
 
 y_net_cashflow_data=_csv_data2int_data(f_net_cashflow,start_index,y_net_cashflow_data)
-#f_csv=pd.read_csv(f_net_cashflow,encoding='gb2312')
-#f_csv2np=np.array(f_csv.iloc[start_index,:])
-#
-#for i in range(len(y_net_cashflow_data)):
-#   if f_csv2np[i+1]=='--':
-#      f_csv2np[i+1]='0'
-#       
-#   y_net_cashflow_data[i]=float(f_csv2np[i+1])
+
 
 x_data=_get_x_data(y_net_cashflow_data) ##获取X坐标  
 #y_data=np.array(y_data)
