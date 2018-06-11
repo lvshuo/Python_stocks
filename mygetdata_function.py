@@ -14,6 +14,7 @@ import os,stat
 import matplotlib.pyplot as plt
 import numpy as np
 import platform 
+import sys
 
 ##------------------------初始化变量---------------------------------------
 x_data1=[2017,2016,2015,2014,2013,2012]
@@ -31,6 +32,13 @@ url_mac='/Users/shuolv/Python/code-finace/data/'
 url_window='data/'
 m_this_year=2017 ##
 
+
+ROE_row='净资产收益率(%)'
+Acountable_money='应收账款周转天数(天)'
+Total_asset_turnover='总资产周转率(次)'
+Net_profit_gross='净利润增长率(%)'
+Total_Liability='资产负债率(%)'
+
 ##----------------获取操作系统--------
 def UsePlatform():
     User_systerm=platform.system()
@@ -40,7 +48,7 @@ def UsePlatform():
 #####----------------------操作系统判断--------------------------------
 user_platform=UsePlatform()
 
-if user_platform =='Windows' :
+if user_platform =='Windows' or  user_platform =='Win32':
     url_comman=url_window
 else:
     url_comman=url_mac
@@ -91,7 +99,7 @@ def _csv_data2int_data(file_cvs,start_index,y_data):
         f_csv_read=open(file_cvs)
         f_csv=pd.read_csv(f_csv_read)  # For windows
         f_csv_read.close()
-        f_csv
+        
     else:
         f_csv=pd.read_csv(file_cvs,encoding='gb2312')  #For Mac os
   
@@ -141,9 +149,11 @@ def _get_x_data(y_data):## 根据y_data 确定x_data
 
  ##-----------------绘图------------------------------------------     
               
-def _matlibplot(f2plot,x_data1,y_data1,start_index,data_range,y_label):
+def _matlibplot(f2plot,x_data1,y_data1,start_index,y_label):
     df=pd.read_excel(f2plot)
     df=DataFrame(df)
+    data_range=df.columns.size-1
+    #print(data_range)
     for s in range(data_range):
         y_data1.append(df.iat[start_index,s+1]) 
         
@@ -215,13 +225,21 @@ if not os.path.exists(path2save):
 else:
     pass
 ####------------------------判断数据所在行数-----------------------
-def _get_csv_data_row(f_csv,accounts):
-    df=pd.read_excel(f_csv)
+def _get_csv_data_row(f_excel,accounts):
+    df=pd.read_excel(f_excel)
     df=DataFrame(df)
-    df.columns.tolist()
-    print(df[0:0])
-    for s in range(15):
-        print(df.iat[s,0])
+    csv_rows=df.iloc[:,0].size 
+    
+    #print(csv_rows)
+    for s in range(csv_rows):
+        if df.iat[s,0]==accounts:
+            row_return =s
+            break
+        else:
+            row_return=0
+    #print(row_return)  
+    return row_return
+       
        # y_data1.append(df.iat[start_index,s+1]) 
     
    ## '净资产收益率(%)'
@@ -316,46 +334,46 @@ for table in tables:
 ##--------------------ROE--------------------------
 
 print('---------------------------ROE-----------------------')
-start_index=7 #ROE 数据行数
+#start_index=7 #ROE 数据行数
 y_data1=[]
-data_range=6
+#data_range=6
 f_zycw=path2save+'主要财务指标-' + names+ '.xlsx'
-_get_csv_data_row(f_zycw,'指标')
+start_index=_get_csv_data_row(f_zycw,ROE_row)
 y_label='ROE %'
-_matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
+_matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 
 ##------------------应收账款周转天数--------------------------------------------
 print('------------------应收账款周转天数-----------------------')
 f_zycw=path2save+'偿还能力-' + names+ '.xlsx'
-start_index=1 #应收账款周转天数所在行数 
+start_index=_get_csv_data_row(f_zycw,Acountable_money) #应收账款周转天数所在行数 
 y_data1=[]
 data_range=6
 y_label='Accounts receivable turnover days'
-_matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
+_matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 ##------------------总资产周转率--------------------------------------------
 print('------------------总资产周转率-----------------------')
 f_zycw=path2save+'偿还能力-' + names+ '.xlsx'
-start_index=4 #应收账款周转天数所在行数 
+start_index=_get_csv_data_row(f_zycw,Total_asset_turnover) #应收账款周转天数所在行数 
 y_data1=[]
-data_range=6
+data_range=6 
 y_label='Total Assets Turnover %'
-_matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
+_matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 ##------------------净利润增长率--------------------------------------------
 print('------------------净利润增长率-----------------------')
 f_zycw=path2save+'成长能力-' + names+ '.xlsx'
-start_index=1 #应收账款周转天数所在行数 
+start_index=_get_csv_data_row(f_zycw,Net_profit_gross) #应收账款周转天数所在行数 
 y_data1=[]
-data_range=6
+data_range=6 
 y_label='Net profit growth rate %'
-_matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
+_matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 ##------------------资产负债率--------------------------------------------
 print('------------------资产负债率-----------------------')
 f_zycw=path2save+'盈利能力-' + names+ '.xlsx'
-start_index=4 #应收账款周转天数所在行数 
+start_index=_get_csv_data_row(f_zycw,Total_Liability) #应收账款周转天数所在行数 
 y_data1=[]
-data_range=6
+data_range=6 
 y_label='Assets and liabilities %'
-_matlibplot(f_zycw,x_data1,y_data1,start_index,data_range,y_label)
+_matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 ##------------------近年营收--------------------------------------------
 print('------------------近年营收（万）-----------------------')
 f_revenue=path2save+'利润表-' + names+ '.csv'
