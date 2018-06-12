@@ -40,6 +40,16 @@ Net_profit_gross='净利润增长率(%)'
 Total_Liability='资产负债率(%)'
 
 Revenues='营业总收入(万元)'
+#Liability_interest=
+Liability_short='短期借款(万元)'
+Liability_long='长期借款(万元)'
+Liability_ponds='应付债券(万元)'
+Total_liability='负债合计(万元)'
+Acounts_Receivable='应收账款(万元)'
+Net_profit='归属于母公司所有者的净利润(万元)'
+#Net_cash='经营活动产生的现金流量净额(万元)'
+Net_cash="经营活动产生的现金流量净额(万元)"
+
 
 ##----------------获取操作系统--------
 def UsePlatform():
@@ -268,7 +278,7 @@ def _get_csv_data_row2(file_cvs,accounts):
             break
         else:
             row2return=0
-            
+    print(row2return)
     return row2return
        
 
@@ -423,10 +433,14 @@ plt.show()
 
 
 
+
+
+
+
 ##------------------近年营收--------------------------------------------
 print('------------------应收账款（万）-----------------------')
 f_account_receivable=path2save+'资产负债表-' + names+ '.csv'
-start_index=6 #应收账款所在行数 
+start_index=_get_csv_data_row2(f_account_receivable,Acounts_Receivable) #应收账款所在行数 
 x_data=[]
 y_account_receivable_data=y_init_data_10year
 data_range=13
@@ -449,7 +463,7 @@ x_data=[]
 
 f_liability_short_interest=path2save+'资产负债表-' + names+ '.csv'
 
-start_short_index=52 #短期借款所在行数 
+start_short_index=_get_csv_data_row2(f_liability_short_interest,Liability_short)  #短期借款所在行数 
 y_liability_short_interest=y_init_data_10year
 y_liability_short_interest_plot=_csv_data2int_data(f_liability_short_interest,start_short_index,y_liability_short_interest)
 
@@ -457,14 +471,14 @@ y_liability_short_interest_plot=_csv_data2int_data(f_liability_short_interest,st
 #print('short',y_liability_short_interest_plot)
 
 f_liability_long_interest=path2save+'资产负债表-' + names+ '.csv'
-start_long_index=84 #长期借款所在行数
+start_long_index=_get_csv_data_row2(f_liability_long_interest,Liability_long) #长期借款所在行数
 y_liability_long_interest=[]
 y_liability_long_interest=_csv_data2int_data(f_liability_long_interest,start_long_index,y_liability_long_interest)
 
 #print('long',y_liability_long_interest)
 
 f_ponds_interest=path2save+'资产负债表-' + names+ '.csv'
-start_ponds_index=85#应付债券所在行数
+start_ponds_index=_get_csv_data_row2(f_ponds_interest,Liability_ponds)#应付债券所在行数
 y_ponds_interest=y_init_data_10year
 y_ponds_interest=_csv_data2int_data(f_ponds_interest,start_ponds_index,y_ponds_interest)
 #print('ponds',y_ponds_interest)
@@ -478,7 +492,7 @@ y_total_liability_interest=np.array(y_liability_short_interest_plot)+np.array(y_
 
 ##总负责
 f_total_liability=path2save+'资产负债表-' + names+ '.csv'
-start_total_liability_index=93
+start_total_liability_index=_get_csv_data_row2(f_total_liability,Total_liability)
 y_total_liability=y_init_data_10year
 y_total_liability=_csv_data2int_data(f_total_liability,start_total_liability_index,y_total_liability)
 #print('total liability',y_total_liability)
@@ -507,10 +521,12 @@ plt.grid(True)
 plt.ylabel(y_label)
 plt.show()
 
+
+
 ##------------------近年净利润--------------------------------------------
 print('------------------近年净利润-----------------------')
 f_net_profit=path2save+'利润表-' + names+ '.csv'
-start_index=40 #净利润所在行数 
+start_index=_get_csv_data_row2(f_net_profit,Net_profit) #净利润所在行数 
 y_net_profit_data=[0,0,0,0,0,0,0,0,0,0] ##y_init_data_10year
 data_range=13
 x_data=[]
@@ -524,10 +540,32 @@ plt.plot(x_data,y_net_profit_data,'bo--',linewidth=2)
 plt.grid(True)
 plt.ylabel(y_label)
 plt.show()
+
+####------------------近年扣除非经常性损益净利润--------------------------------------------
+print('------------------近年扣非净利润-----------------------')
+#f_net_profit=path2save+'利润表-' + names+ '.csv'
+#start_index=_get_csv_data_row2(f_net_profit,Net_profit) #净利润所在行数 
+#y_net_profit_data=[0,0,0,0,0,0,0,0,0,0] ##y_init_data_10year
+#data_range=13
+#x_data=[]
+#y_label='Net profit'
+#
+#y_net_profit_data=_csv_data2int_data(f_net_profit,start_index,y_net_profit_data)
+#
+#x_data=_get_x_data(y_net_profit_data) ##获取X坐标
+##y_data=np.array(y_data)
+#plt.plot(x_data,y_net_profit_data,'bo--',linewidth=2)
+#plt.grid(True)
+#plt.ylabel(y_label)
+#plt.show()
+
 ##------------------现金流量净额--------------------------------------------
 print('------------------现金流量净额-----------------------')
 f_net_cashflow=path2save+'现金流量表-' + names+ '.csv'
-start_index=24 #现金流量净额所在行数 
+f_net_cashflow_excel=path2save+'现金流量表-' + names+ '.xlsx'
+#########################################
+start_index=24##_get_csv_data_row2(f_net_cashflow,Net_cash) #现金流量净额所在行数   24
+#########################################
 y_net_cashflow_data=y_init_data_10year
 data_range=13
 x_data=[]
