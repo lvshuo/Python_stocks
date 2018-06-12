@@ -39,9 +39,12 @@ Total_asset_turnover='总资产周转率(次)'
 Net_profit_gross='净利润增长率(%)'
 Total_Liability='资产负债率(%)'
 
+Revenues='营业总收入(万元)'
+
 ##----------------获取操作系统--------
 def UsePlatform():
     User_systerm=platform.system()
+    #User_systerm=sys.platform
     return User_systerm
 
 
@@ -241,8 +244,33 @@ def _get_csv_data_row(f_excel,accounts):
     return row_return
        
        # y_data1.append(df.iat[start_index,s+1]) 
+###-----------------------获取csv文件所在行数------------------------
+def _get_csv_data_row2(file_cvs,accounts):
+    if user_platform== 'Windows' or user_platform== 'win32' :  
+        f_csv_read=open(file_cvs)
+       
+        f_csv=pd.read_csv(f_csv_read)  # For windows
+        #rows_of_csv=len(f_csv_read.readlines())
+        f_csv_read.close()
+        
+    else:       
+        f_csv=pd.read_csv(file_cvs,encoding='gb2312')  #For Mac os
+
+    rows_of_csv=len(f_csv.iloc[:,0])
     
-   ## '净资产收益率(%)'
+    print(rows_of_csv)
+    
+    for i in range(rows_of_csv):
+        if accounts==f_csv.iloc[i,0]:
+            row2return=i
+            print(f_csv.iloc[i,0])
+            print(i)
+            break
+        else:
+            row2return=0
+            
+    return row2return
+       
 
 #############---------------下载资产负债表-----------------
 bs_url = 'http://quotes.money.163.com/service/zcfzb_{code}.html?type=year'
@@ -377,11 +405,11 @@ _matlibplot(f_zycw,x_data1,y_data1,start_index,y_label)
 ##------------------近年营收--------------------------------------------
 print('------------------近年营收（万）-----------------------')
 f_revenue=path2save+'利润表-' + names+ '.csv'
-start_index=0 #营业收入所在行数 
+start_index=_get_csv_data_row2(f_revenue,Revenues) #营业收入所在行数 
 y_revenue_data=y_init_data_10year
 x_data=[]
 data_range=13
-y_label='Revenue'
+y_label='Revenue'   
 
 y_revenue_data=_csv_data2int_data(f_revenue,start_index,y_revenue_data)
 
