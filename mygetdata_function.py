@@ -63,7 +63,7 @@ user_platform=UsePlatform()
 
 if user_platform =='Windows' or  user_platform =='Win32':
     url_comman=url_window
-else:
+elif user_platform == 'Darwin':    
     url_comman=url_mac
 
 print(url_comman)
@@ -113,7 +113,7 @@ def _csv_data2int_data(file_cvs,start_index,y_data):
         f_csv=pd.read_csv(f_csv_read)  # For windows
         f_csv_read.close()
         
-    else:
+    elif user_platform ==  'Darwin':
         f_csv=pd.read_csv(file_cvs,encoding='gb2312')  #For Mac os
   
     f_csv2np=np.array(f_csv.iloc[start_index,:])
