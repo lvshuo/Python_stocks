@@ -3,6 +3,10 @@
 Created on Thu Jun  7 10:13:34 2018
 
 @author: andy.lv
+
+##----------------
+不支持上市低于3年的公司
+##----------------
 """
 from time import sleep
 from datetime import datetime
@@ -169,6 +173,7 @@ def _matlibplot(f2plot,x_data1,y_data1,start_index,y_label):
     #print(data_range)
     for s in range(data_range):
         y_data1.append(df.iat[start_index,s+1]) 
+        #print(y_data1[s])
         
     y_data1=np.array(y_data1)   
     x_data1=np.array(x_data1)
@@ -268,17 +273,17 @@ def _get_csv_data_row2(file_cvs,accounts):
 
     rows_of_csv=len(f_csv.iloc[:,0])
     
-    print(rows_of_csv)
+    #print(rows_of_csv)
     
     for i in range(rows_of_csv):
         if accounts==f_csv.iloc[i,0]:
             row2return=i
-            print(f_csv.iloc[i,0])
-            print(i)
+            #print(f_csv.iloc[i,0])
+            #print(i)
             break
         else:
             row2return=0
-    print(row2return)
+    #print(row2return)
     return row2return
        
 
@@ -569,7 +574,7 @@ start_index=24##_get_csv_data_row2(f_net_cashflow,Net_cash) #现金流量净额�
 y_net_cashflow_data=y_init_data_10year
 data_range=13
 x_data=[]
-y_label='Net Cash Flow (10 th)'
+y_label='Re Nf Ar Nc (10 thousands)'
 
 y_net_cashflow_data=_csv_data2int_data(f_net_cashflow,start_index,y_net_cashflow_data)
 
