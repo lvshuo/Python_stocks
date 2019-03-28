@@ -21,8 +21,8 @@ import platform
 import sys
 
 ##------------------------初始化变量---------------------------------------
-x_data1=[2017,2016,2015,2014,2013,2012]
-x_data2=[2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006,2005]
+x_data1=[2018,2017,2016,2015,2014,2013]
+x_data2=[2018,2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006]
 x_data=[]
 y_init_data_10year=[0,0,0,0,0,0,0,0,0,0]
 y_init_data_5year=[0,0,0,0,0]
@@ -34,7 +34,7 @@ y_ponds_interest=[]
 label_dict={'Rev':'Revenue','Cash':'Cash Flow'}
 url_mac='/Users/shuolv/Python/code-finace/data/'
 url_window='data/'
-m_this_year=2017 ##
+m_this_year=2018 ##
 
 
 ROE_row='净资产收益率(%)'
@@ -328,7 +328,7 @@ _csv2excel(to_file_template,to_file_xlsx)
 #os.remove(to_file_template)
 
 ######----------------------其他财务比率--------------------------
-ylbl_url='http://quotes.money.163.com/f10/zycwzb_{code},year.html'
+ylbl_url='http://quotes.money.163.com/f10/zycwzb_{code}.html?type=year'
 #to_file_template = 'data/ylbl{code}.xlsx'
 #to_file=to_file_template.format(code=_tcode(codes))
 
